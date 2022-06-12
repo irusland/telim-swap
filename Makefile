@@ -3,7 +3,7 @@ install:
 	poetry install
 
 start:
-	echo start
+	python3 src/main.py
 
 stop:
 	echo stop

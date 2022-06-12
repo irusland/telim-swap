@@ -6,6 +6,9 @@ authors = ["Ruslan Sirazhetdinov <ruslansir@icloud.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+aiogram = "^2.20"
+pydantic = "^1.9.1"
+punq = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
 
