@@ -4,7 +4,6 @@ from aiogram import Bot, Dispatcher, executor, types
 
 from src.di import get_bot_container
 
-
 logging.basicConfig(level=logging.INFO)
 
 

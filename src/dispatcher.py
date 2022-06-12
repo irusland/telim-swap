@@ -1,14 +1,18 @@
 
 from aiogram import Bot, Dispatcher, executor, types
 
-from src.handlers.start import send_welcome
+from src.handlers.start import StartHandler
 
 
 class ImSwapDispatcher(Dispatcher):
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot, start_handler: StartHandler):
         super().__init__(bot)
 
+        self._handlers = {
+            ('start', 'help'): start_handler,
+        }
         self._register_handlers()
 
     def _register_handlers(self) -> None:
-        self.message_handler(commands=['start', 'help'])(send_welcome)
+        for commands, handler in self._handlers.items():
+            self.message_handler(commands=list(commands))(handler)

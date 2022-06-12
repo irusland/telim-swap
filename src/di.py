@@ -4,6 +4,7 @@ from punq import Container
 
 from src.bot import ImSwapBot
 from src.dispatcher import ImSwapDispatcher
+from src.handlers.start import StartHandler
 from src.settings import BotApiSettings
 
 import logging
@@ -24,5 +25,6 @@ def get_bot_container() -> Container:
     register_settings(container, BotApiSettings)
     container.register(Bot, ImSwapBot)
     container.register(Dispatcher, ImSwapDispatcher)
+    container.register(StartHandler)
 
     return container
