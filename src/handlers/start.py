@@ -1,13 +1,10 @@
 import logging
 
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from src.handlers.base import BaseHandler
-from src.settings import BotApiSettings
-from aiogram.types import ReplyKeyboardRemove, \
-    ReplyKeyboardMarkup, KeyboardButton, \
-    InlineKeyboardMarkup, InlineKeyboardButton
-
+from src.utils.log import log_request
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,7 +14,7 @@ class StartHandler(BaseHandler):
         inline_btn_1 = InlineKeyboardButton('Первая кнопка!', callback_data='button1')
         self._inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
 
-
+    @log_request
     async def __call__(self, message: types.Message) -> None:
         """
         This handler will be called when user sends `/start` or `/help` command

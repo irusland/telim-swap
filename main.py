@@ -1,6 +1,6 @@
 import logging
 
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Dispatcher, executor
 
 from src.di import get_bot_container
 

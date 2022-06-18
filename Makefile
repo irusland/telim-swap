@@ -1,15 +1,14 @@
-ENV_FILE = env/env.env
+ENV_FILE = .env/dev.env
 
 include ${ENV_FILE}
 $(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' ${ENV_FILE}))
 
 
 install:
-	python3 -m venv .venv
 	poetry install
 
 start:
-	python3 src/main.py
+	python3 main.py
 
 stop:
 	echo stop
