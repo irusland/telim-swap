@@ -9,7 +9,7 @@ from src.bot import ImSwapBot
 from src.dispatcher import ImSwapDispatcher
 from src.handlers.admin import AdminHandler, AdminSettings
 from src.handlers.base import BaseHandler
-from src.handlers.image import ImageHandler
+from src.handlers.preferences import PreferencesHandler
 from src.handlers.start import StartHandler
 from src.handlers.text import TextHandler
 from src.localisation.language_coordinator import LanguageCoordinator
@@ -44,7 +44,7 @@ def get_bot_container() -> Container:
     container.register(PreferencesStorage)
     container.register(BaseHandler, AdminHandler)
 
-    container.register(BaseHandler, ImageHandler)
+    container.register(BaseHandler, PreferencesHandler)
     container.register(BaseHandler, TextHandler)
 
     return container
