@@ -8,6 +8,7 @@ class StartHandler(BaseHandler):
     def __init__(self, dp: Dispatcher):
         @dp.message_handler(commands=['start'])
         async def __call__(message: types.Message, state: FSMContext):
+            await message.reply(f'{await state.get_data()}')
             async with state.proxy() as proxy:
                 if 'counter' not in proxy:
                     proxy.setdefault('counter', 0)

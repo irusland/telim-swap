@@ -9,11 +9,13 @@ from src.bot import ImSwapBot
 from src.dispatcher import ImSwapDispatcher
 from src.handlers.admin import AdminHandler, AdminSettings
 from src.handlers.base import BaseHandler
+from src.handlers.image import ImageHandler
 from src.handlers.preferences import PreferencesHandler
 from src.handlers.start import StartHandler
 from src.handlers.text import TextHandler
 from src.localisation.language_coordinator import LanguageCoordinator
 from src.localisation.localisation import Localisation, LocalisationEN, LocalisationRU
+from src.neural_net_clients.neural_manager import NeuralManager
 from src.settings import BotApiSettings
 from src.storage.preferences_storage import PreferencesStorage
 
@@ -45,6 +47,10 @@ def get_bot_container() -> Container:
     container.register(BaseHandler, AdminHandler)
 
     container.register(BaseHandler, PreferencesHandler)
+
+    container.register(NeuralManager)
+    container.register(BaseHandler, ImageHandler)
+
     container.register(BaseHandler, TextHandler)
 
     return container

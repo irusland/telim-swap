@@ -21,6 +21,12 @@ class Localisation(BaseModel):
 
     INCORRECT_INPUT: str
 
+    AVAILABLE_MODELS: str
+    SEND_A_STYLE_PICTURE: str
+    SEND_A_CONTENT_PICTURE: str
+    ERROR_HAPPENED_TRY_AGAIN: str
+    IMAGE_SAVED: str
+
 
 class LocalisationEN(Localisation):
     _NAME: LocalisationName = LocalisationName.ENGLISH
@@ -35,6 +41,12 @@ class LocalisationEN(Localisation):
 
     INCORRECT_INPUT: str = 'Incorrect input'
 
+    AVAILABLE_MODELS: str = 'Available models'
+    SEND_A_STYLE_PICTURE: str = 'Please, send a style picture'
+    SEND_A_CONTENT_PICTURE: str = 'Please, send a content picture'
+    ERROR_HAPPENED_TRY_AGAIN: str = 'Error happened, please try again'
+    IMAGE_SAVED: str = 'Image saved'
+
 
 class LocalisationRU(LocalisationEN):
     _NAME: LocalisationName = LocalisationName.RUSSIAN
@@ -47,3 +59,9 @@ class LocalisationRU(LocalisationEN):
     LANGUAGE_WAS_SET_TO: str = 'Текущий выбранный язык'
 
     INCORRECT_INPUT: str = 'Неправильный ввод ❌'
+
+    AVAILABLE_MODELS: str = 'Доступные модели'
+    SEND_A_STYLE_PICTURE: str = 'Отправьте картинку в качестве шаблона стиля'
+    SEND_A_CONTENT_PICTURE: str = 'Отправьте картинку для применения стиля'
+    ERROR_HAPPENED_TRY_AGAIN: str = 'Произошла ошибка, попробуйте позже'
+    IMAGE_SAVED: str = 'Изображение сохранено'
