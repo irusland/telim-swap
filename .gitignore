@@ -4,3 +4,6 @@
 .env/
 .*
 *.log
+*.jpg
+*.pth
+*.mar
