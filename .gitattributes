@@ -1,0 +1,4 @@
+modelstore/vgg19.mar filter=lfs diff=lfs merge=lfs -text
+modelstore/dcgan_fashiongen.mar filter=lfs diff=lfs merge=lfs -text
+notebooks/mac_m1_mps.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/neural-transfer.ipynb filter=lfs diff=lfs merge=lfs -text
