@@ -15,10 +15,12 @@ mac-pre-init:
 install:
 	poetry install
 
+serve:
+	./serve_models.sh
 
 start:
 	python3 main.py
 
 
 stop:
-	echo stop
+	torchserve --stop

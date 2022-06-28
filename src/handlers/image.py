@@ -1,4 +1,5 @@
 import logging
+from typing import cast
 
 from aiogram import types, Bot, Dispatcher
 from aiogram.dispatcher import FSMContext
@@ -8,6 +9,8 @@ from aiogram.types import InlineKeyboardMarkup, \
 
 from src.handlers.base import BaseHandler
 from src.localisation.language_coordinator import LanguageCoordinator
+from src.localisation.localisation import Localisation
+from src.neural_net_clients.errors import NeuralNetError
 from src.neural_net_clients.neural_manager import NeuralManager
 from src.neural_net_clients.neural_net import ImSwapNeuralNet
 
@@ -123,11 +126,21 @@ class ImageHandler(BaseHandler):
             model_id = state_proxy[MODEL_CHOSEN_KEY]
             filtered_models = list(filter(lambda m: str(id(m)) == model_id, models))
             if len(filtered_models) != 1:
-                await message.answer(localisation.ERROR_HAPPENED_TRY_AGAIN)
-                await state.finish()
+                return await self._fallback_action(message=message, state=state,
+                                                   localisation=localisation)
 
-            model: ImSwapNeuralNet = filtered_models[0]
-            result_image = model.swap_style(style_image=style_photo,
-                                            content_image=content_photo)
+            model: ImSwapNeuralNet = cast(ImSwapNeuralNet, filtered_models[0])
+            try:
+                result_image = model.swap_style(
+                    style_image=style_photo,
+                    content_image=content_photo)
+            except NeuralNetError:
+                return await self._fallback_action(message=message, state=state,
+                                                   localisation=localisation)
 
             await bot.send_photo(message.chat.id, result_image)
+
+    async def _fallback_action(self, message: types.Message, state: FSMContext,
+                               localisation: Localisation):
+        await message.answer(localisation.ERROR_HAPPENED_TRY_AGAIN)
+        await state.finish()
