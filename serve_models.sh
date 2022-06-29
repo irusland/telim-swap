@@ -1,6 +1,8 @@
-#!/bin/zsh
+#!/bin/bash
+
 
 torchserve --start \
   --no-config-snapshots \
   --model-store modelstore \
-  --ts-config modelstore/ts-config.properties
+  --ts-config ts-config.properties \
+  --foreground
