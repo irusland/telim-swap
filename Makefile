@@ -1,4 +1,4 @@
-ENV_FILE = .env/dev.env
+ENV_FILE = .env
 
 include ${ENV_FILE}
 $(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' ${ENV_FILE}))

@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 services:
   base:
     image: base:latest
@@ -8,7 +8,7 @@ services:
   backend:
     container_name: backend
     env_file:
-      - .env/env.env
+      - .env
     build:
       dockerfile: docker/backend.dockerfile
     deploy:
