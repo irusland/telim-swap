@@ -18,6 +18,12 @@ install:
 serve:
 	./serve_models.sh
 
+build:
+    docker-compose build
+
+up:
+    docker-compose up backend
+
 start:
 	python3 main.py
 

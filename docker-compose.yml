@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  base:
+    image: base:latest
+    build:
+      dockerfile: docker/base.dockerfile
+
+  backend:
+    container_name: backend
+    env_file:
+      - .env/env.env
+    build:
+      dockerfile: docker/backend.dockerfile
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+#        max_attempts: 3
+#        window: 120s
