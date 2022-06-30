@@ -1,4 +1,4 @@
-FROM base:latest
+FROM --platform=linux/amd64 base:linux
 
 WORKDIR /code
 
