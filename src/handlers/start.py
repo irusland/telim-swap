@@ -28,6 +28,9 @@ class StartHandler(BaseHandler):
             localisation = language_coordinator.get_localisation(message.chat.id)
             await message.answer(localisation.ERROR_HAPPENED_TRY_AGAIN)
             logger.exception(error)
+            state: FSMContext = dp.current_state(chat=message.chat.id,
+                                                 user=message.from_user.id)
+            await state.finish()
             return True
 
         @dp.message_handler(state='*', commands=['cancel'])
