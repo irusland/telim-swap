@@ -1,6 +1,6 @@
 import torch
 
-from model import RealESRGANer
+from models_backend.resgan.model import RealESRGANer
 
 if __name__ == '__main__':
     model = RealESRGANer()
