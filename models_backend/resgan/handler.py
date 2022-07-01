@@ -57,7 +57,9 @@ class NeuralHandler(BaseHandler):
     def postprocess(self, data) -> List[bytes]:
         logger.info('Postprocess %s', data)
         array: numpy.ndarray = data
-        image: PIL.Image.Image = Image.fromarray(array).convert('RGBA')
+        image: PIL.Image.Image = Image.fromarray(array)
+        r, g, b = image.split()
+        image = Image.merge('RGB', (b, g, r))
         raw = io.BytesIO()
         image.save(raw, format='PNG')
         return [raw.getvalue()]

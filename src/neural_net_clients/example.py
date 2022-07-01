@@ -12,6 +12,6 @@ if __name__ == '__main__':
             '/Users/ruslansirazhetdinov/Documents/MIPT/telim-swap/notebooks/datasets/picasso.jpg',
             'rb') as style:
         with open(
-                '/Users/ruslansirazhetdinov/Documents/MIPT/telim-swap/notebooks/datasets/lilpic.png',
+                '/Users/ruslansirazhetdinov/Documents/MIPT/telim-swap/notebooks/datasets/road.png',
                 'rb') as content:
             print(net.enrich(content.read()))

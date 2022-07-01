@@ -17,6 +17,7 @@ from src.localisation.language_coordinator import LanguageCoordinator
 from src.localisation.localisation import Localisation, LocalisationEN, LocalisationRU
 from src.neural_net_clients.neural_manager import NeuralManager
 from src.neural_net_clients.neural_net import ImSwapNeuralNet, ImSwapNeuralNetSettings
+from src.neural_net_clients.res_gan import ResGanSettings, ResGan
 from src.settings import BotApiSettings
 from src.storage.preferences_storage import PreferencesStorage
 
@@ -53,6 +54,8 @@ def get_bot_container() -> Container:
     container.register(BaseHandler, ImageHandler)
     register_settings(container, ImSwapNeuralNetSettings)
     container.register(ImSwapNeuralNet)
+    register_settings(container, ResGanSettings)
+    container.register(ResGan)
 
     container.register(BaseHandler, TextHandler)
 
