@@ -19,5 +19,4 @@ class NeuralNet(abc.ABC):
             self._settings.model_url,
             files=files,
         )
-        # logger.info(r.status_code)
         return response

@@ -3,7 +3,7 @@ from yarl import URL
 
 
 class BaseNetSettings(BaseSettings):
-    predictions_url: URL
+    predictions_url: URL = URL('http://localhost:8080/predictions/')
     model: str
 
     @property
