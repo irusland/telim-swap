@@ -134,7 +134,9 @@ class ImageHandler(BaseHandler):
                 result_image = model.swap_style(
                     style_image=style_photo,
                     content_image=content_photo)
-            except (NeuralNetError, Exception):
+            except (NeuralNetError,
+                    # Exception
+                    ):
                 return await self._fallback_action(message=message, state=state,
                                                    localisation=localisation)
 

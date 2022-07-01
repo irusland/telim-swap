@@ -27,6 +27,8 @@ class Localisation(BaseModel):
     ERROR_HAPPENED_TRY_AGAIN: str
     IMAGE_SAVED: str
 
+    CANCELLED: str
+
 
 class LocalisationEN(Localisation):
     _NAME: LocalisationName = LocalisationName.ENGLISH
@@ -47,6 +49,8 @@ class LocalisationEN(Localisation):
     ERROR_HAPPENED_TRY_AGAIN: str = 'Error happened, please try again'
     IMAGE_SAVED: str = 'Image saved'
 
+    CANCELLED: str = 'Cancelled'
+
 
 class LocalisationRU(LocalisationEN):
     _NAME: LocalisationName = LocalisationName.RUSSIAN
@@ -65,3 +69,5 @@ class LocalisationRU(LocalisationEN):
     SEND_A_CONTENT_PICTURE: str = 'Отправьте картинку для применения стиля'
     ERROR_HAPPENED_TRY_AGAIN: str = 'Произошла ошибка, попробуйте позже'
     IMAGE_SAVED: str = 'Изображение сохранено'
+
+    CANCELLED: str = 'Отменено'
