@@ -20,3 +20,11 @@ class NeuralNet(abc.ABC):
             files=files,
         )
         return response
+
+    @abc.abstractmethod
+    def __call__(self, *images: bytearray) -> bytearray:
+        pass
+
+    @abc.abstractmethod
+    def get_image_number(self) -> int:
+        pass

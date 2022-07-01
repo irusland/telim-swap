@@ -1,5 +1,4 @@
 import logging
-from typing import cast
 
 from aiogram import types, Bot, Dispatcher
 from aiogram.dispatcher import FSMContext
@@ -9,9 +8,9 @@ from aiogram.types import InlineKeyboardMarkup, \
 
 from src.handlers.base import BaseHandler
 from src.localisation.language_coordinator import LanguageCoordinator
+from src.neural_net_clients.base_neural_net import NeuralNet
 from src.neural_net_clients.errors import NeuralNetError
 from src.neural_net_clients.neural_manager import NeuralManager
-from src.neural_net_clients.neural_net import ImSwapNeuralNet
 
 logger = logging.getLogger(__name__)
 
@@ -27,14 +26,24 @@ class ModelStates(StatesGroup):
 MODEL_CHOSEN_KEY = 'MODEL_CHOSEN_KEY'
 STYLE_PHOTO_KEY = 'STYLE_PHOTO_KEY'
 CONTENT_PHOTO_KEY = 'CONTENT_PHOTO_KEY'
+RESULT_PHOTO_KEY = 'RESULT_PHOTO_KEY'
 
 
 class ImageHandler(BaseHandler):
+    def _get_model(self, model_id) -> NeuralNet:
+        models = self._neural_manager.get_available_models()
+        filtered_models = list(filter(lambda m: str(id(m)) == model_id, models))
+        if len(filtered_models) != 1:
+            raise NeuralNetError()
+        return filtered_models[0]
+
     def __init__(
             self, bot: Bot, dp: Dispatcher,
             language_coordinator: LanguageCoordinator,
             neural_manager: NeuralManager,
     ):
+        self._neural_manager = neural_manager
+
         @dp.message_handler(commands=['image'])
         async def model_choice(message: types.Message) -> None:
             await ModelStates.menu.set()
@@ -64,19 +73,31 @@ class ImageHandler(BaseHandler):
         async def model_chosen(callback_query: types.CallbackQuery, state: FSMContext):
             await bot.answer_callback_query(callback_query.id)
             async with state.proxy() as state_proxy:
-                state_proxy[MODEL_CHOSEN_KEY] = callback_query.data
+                model_id = callback_query.data
+                state_proxy[MODEL_CHOSEN_KEY] = model_id
 
             localisation = language_coordinator.get_localisation(
                 chat_id=callback_query.message.chat.id
             )
-            await ModelStates.photo1.set()
-            await bot.send_message(
-                callback_query.from_user.id,
-                localisation.SEND_A_STYLE_PICTURE
-            )
-            await ModelStates.model.set()
 
-        @dp.message_handler(content_types=['photo'], state=ModelStates.model)
+            model = self._get_model(model_id)
+            photos_needed = model.get_image_number()
+            if photos_needed == 1:
+                await bot.send_message(
+                    callback_query.from_user.id,
+                    localisation.SEND_A_CONTENT_PICTURE
+                )
+                await ModelStates.photo2.set()
+            elif photos_needed == 2:
+                await bot.send_message(
+                    callback_query.from_user.id,
+                    localisation.SEND_A_STYLE_PICTURE
+                )
+                await ModelStates.photo1.set()
+            else:
+                raise NotImplementedError()
+
+        @dp.message_handler(content_types=['photo'], state=ModelStates.photo1)
         async def style_photo(message: types.Message, state: FSMContext) -> None:
             localisation = language_coordinator.get_localisation(
                 chat_id=message.chat.id
@@ -111,27 +132,18 @@ class ImageHandler(BaseHandler):
             async with state.proxy() as state_proxy:
                 state_proxy[CONTENT_PHOTO_KEY] = downloaded_file
 
-            await ModelStates.eval.set()
+                model = self._get_model(model_id=state_proxy[MODEL_CHOSEN_KEY])
 
-        @dp.message_handler(state=ModelStates.eval)
-        async def model_eval(message: types.Message, state: FSMContext) -> None:
-            localisation = language_coordinator.get_localisation(
-                chat_id=message.chat.id
+                photos_needed = model.get_image_number()
+
+                photos_keys = [STYLE_PHOTO_KEY, CONTENT_PHOTO_KEY][-photos_needed:]
+                photos = [state_proxy[key] for key in photos_keys]
+
+            result_image = model(
+                *photos
             )
             async with state.proxy() as state_proxy:
-                style_photo = state_proxy[STYLE_PHOTO_KEY]
-                content_photo = state_proxy[CONTENT_PHOTO_KEY]
-            models = neural_manager.get_available_models()
-            model_id = state_proxy[MODEL_CHOSEN_KEY]
-            filtered_models = list(filter(lambda m: str(id(m)) == model_id, models))
-            if len(filtered_models) != 1:
-                raise NeuralNetError()
-
-            model: ImSwapNeuralNet = cast(ImSwapNeuralNet, filtered_models[0])
-            result_image = model.swap_style(
-                style_image=style_photo,
-                content_image=content_photo
-            )
+                state_proxy[RESULT_PHOTO_KEY] = result_image
 
             await bot.send_photo(message.chat.id, result_image)
             await state.finish()

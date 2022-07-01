@@ -26,9 +26,12 @@ class ImSwapNeuralNet(NeuralNet):
         super().__init__(settings)
         self._settings = settings
 
-    def swap_style(self, style_image: bytearray, content_image: bytearray) -> Image:
+    def get_image_number(self) -> int:
+        return 2
+
+    def __call__(self, style_image: bytearray, content_image: bytearray) -> bytearray:
         files = {STYLE_IMAGE_KEY: style_image, CONTENT_IMAGE_KEY: content_image}
-        r = self.request(files=files)
+        r = self.request(files=files)  # todo async
 
         path = 'gen.png'
         if r.status_code == 200:

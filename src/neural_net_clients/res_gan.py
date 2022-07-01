@@ -16,7 +16,10 @@ class ResGan(NeuralNet):
         super().__init__(settings)
         self._settings = settings
 
-    def enrich(self, image: bytearray):
+    def get_image_number(self) -> int:
+        return 1
+
+    def __call__(self, image: bytearray) -> bytearray:
         files = {'image': image}
         r = self.request(files=files)
 
