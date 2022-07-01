@@ -5,6 +5,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from punq import Container, Scope
 from pydantic import BaseSettings, BaseModel
 
+from src.animations import Animation
 from src.bot import ImSwapBot
 from src.dispatcher import ImSwapDispatcher
 from src.handlers.admin import AdminHandler, AdminSettings
@@ -20,6 +21,7 @@ from src.neural_net_clients.neural_net import ImSwapNeuralNet, ImSwapNeuralNetSe
 from src.neural_net_clients.res_gan import ResGanSettings, ResGan
 from src.settings import BotApiSettings
 from src.storage.preferences_storage import PreferencesStorage
+from src.utils.reflection import inheritors
 
 
 def register_settings(container: Container, settings: Type[BaseSettings]):
@@ -58,5 +60,8 @@ def get_bot_container() -> Container:
     container.register(ResGan)
 
     container.register(BaseHandler, TextHandler)
+
+    for animation_class in inheritors(Animation):
+        container.register(Animation, animation_class)
 
     return container

@@ -1,4 +1,8 @@
+import asyncio
 import logging
+from random import choice
+from threading import Event
+from typing import List
 
 from aiogram import types, Bot, Dispatcher
 from aiogram.dispatcher import FSMContext
@@ -6,6 +10,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import InlineKeyboardMarkup, \
     InlineKeyboardButton
 
+from src.animations import Animation
 from src.handlers.base import BaseHandler
 from src.localisation.language_coordinator import LanguageCoordinator
 from src.neural_net_clients.base_neural_net import NeuralNet
@@ -41,8 +46,10 @@ class ImageHandler(BaseHandler):
             self, bot: Bot, dp: Dispatcher,
             language_coordinator: LanguageCoordinator,
             neural_manager: NeuralManager,
+            animations: List[Animation],
     ):
         self._neural_manager = neural_manager
+        self._animations = animations
 
         @dp.message_handler(commands=['image'])
         async def model_choice(message: types.Message) -> None:
@@ -129,6 +136,12 @@ class ImageHandler(BaseHandler):
 
             await message.answer(localisation.IMAGE_SAVED)
 
+            message = await message.answer('.')
+            stop_event = Event()
+            event_loop = asyncio.get_event_loop()
+            spin = asyncio.ensure_future(self._animate(message, stop_event),
+                                         loop=event_loop)
+
             async with state.proxy() as state_proxy:
                 state_proxy[CONTENT_PHOTO_KEY] = downloaded_file
 
@@ -140,11 +153,26 @@ class ImageHandler(BaseHandler):
                 photos = [state_proxy[key] for key in photos_keys]
 
             await state.finish()
-
             result_image = await model(
                 *photos
             )
+
+            stop_event.set()
+            await spin
+            await message.delete()
             async with state.proxy() as state_proxy:
                 state_proxy[RESULT_PHOTO_KEY] = result_image
 
             await bot.send_photo(message.chat.id, result_image)
+
+    async def _animate(self, message: types.Message, stop_event: Event):
+        logger.info('Start animation for %s', message)
+        animation = choice(self._animations)
+        i = 0
+        while not stop_event.is_set():
+            await message.edit_text(animation[i], parse_mode="Markdown")
+            if len(animation) == 1:
+                break
+            i += 1
+            i %= len(animation)
+            await asyncio.sleep(animation.DELAY)
