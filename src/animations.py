@@ -11,7 +11,6 @@ class Animation(abc.ABC):
     def __len__(self) -> int:
         return len(self.ANIMATION_TAPE)
 
-
 #
 # class BarChartAnimation(Animation):
 #     ANIMATION_TAPE = '▁▂▃▄▅▆▇█▇▆▅▄▃▁'
@@ -24,6 +23,7 @@ class Animation(abc.ABC):
 # class BrailleAnimation(Animation):
 #     ANIMATION_TAPE = '⣾⣽⣻⢿⡿⣟⣯⣷'
 #
+
 
 class DLSAnimation(Animation):
     DELAY = 0.1
