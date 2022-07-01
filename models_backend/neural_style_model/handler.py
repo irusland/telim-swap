@@ -19,9 +19,9 @@ class NeuralHandler(BaseHandler):
         super().__init__()
         self.imsize = 512 if torch.cuda.is_available() else 128
         self.loader = transforms.Compose([
-            transforms.Resize(self.imsize),
             transforms.ToTensor()
         ])
+        self.resize = transforms.Resize(self.imsize)
         self.unloader = transforms.ToPILImage()
 
         self.cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(
@@ -43,24 +43,28 @@ class NeuralHandler(BaseHandler):
         files: Dict[str, bytearray] = data[0]
 
         style_img, content_img = (
-            self._bytes_to_tensor(files[key])
+            self._bytes_to_tensor(files[key]).to(self.device, torch.float)
             for key in (STYLE_IMAGE_KEY, CONTENT_IMAGE_KEY)
         )
 
-        input_img = content_img.clone()
-        return [style_img, content_img, input_img]
+        return [style_img, content_img]
 
     def inference(self, data, *args, **kwargs):
         logger.info('Inference %s', data)
-        marshalled_data = [d.to(self.device, torch.float) for d in data]
-        style_img, content_img, input_img = marshalled_data
+        style_img, content_img = data
+        style_img_shape, content_img_shape = style_img.shape[-2:], content_img.shape[-2:]
+        logger.info('Shapes: %s, %s', style_img_shape, content_img_shape)
+        to_content_resize = transforms.Resize(content_img_shape)
+        style_img, content_img = self.resize(to_content_resize(style_img)), self.resize(content_img)
+        input_img = content_img.clone()
+
         cnn = self.model.features.to(self.device).eval()
         output = run_style_transfer(
             cnn, self.cnn_normalization_mean, self.cnn_normalization_std,
             content_img, style_img, input_img, device=self.device
         )
 
-        return output
+        return to_content_resize(output)
 
     def postprocess(self, data) -> List[bytes]:
         logger.info('Postprocess %s', data)
