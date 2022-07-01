@@ -10,7 +10,6 @@ import numpy as np
 import torch
 from PIL import Image
 from torch.nn import functional as F
-from torchvision.transforms import transforms
 from ts.torch_handler.base_handler import BaseHandler
 
 logger = logging.getLogger(__name__)
@@ -26,10 +25,7 @@ class NeuralHandler(BaseHandler):
         self.pre_pad = 10
         self.mod_scale = None
 
-        self.loader = transforms.Compose([
-            transforms.ToTensor()
-        ])
-        self.unloader = transforms.ToPILImage()
+        self.limsize = 256
 
     def _bytes_to_image(self, raw: bytearray) -> PIL.Image.Image:
         return Image.open(io.BytesIO(raw))
@@ -45,6 +41,16 @@ class NeuralHandler(BaseHandler):
         nparr = np.fromstring(bytes(raw_image), np.uint8)
         img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
+        height, width = img_np.shape[0], img_np.shape[1]
+        logger.info('Image shape %s', (width, height))
+        max_ = max(height, width)
+        if max_ > self.limsize:
+            scale_percent = self.limsize / max_
+            height = int(height * scale_percent)
+            width = int(width * scale_percent)
+            dim = (width, height)
+            img_np = cv2.resize(img_np, dim, interpolation=cv2.INTER_LINEAR)
+            logger.info('Limit reached, downsclaing by %s to %s', scale_percent, dim)
         return img_np
 
     def inference(self, data, *args, **kwargs):
