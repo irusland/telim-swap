@@ -139,11 +139,12 @@ class ImageHandler(BaseHandler):
                 photos_keys = [STYLE_PHOTO_KEY, CONTENT_PHOTO_KEY][-photos_needed:]
                 photos = [state_proxy[key] for key in photos_keys]
 
-            result_image = model(
+            await state.finish()
+
+            result_image = await model(
                 *photos
             )
             async with state.proxy() as state_proxy:
                 state_proxy[RESULT_PHOTO_KEY] = result_image
 
             await bot.send_photo(message.chat.id, result_image)
-            await state.finish()

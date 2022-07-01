@@ -2,7 +2,6 @@ import logging
 
 from src.neural_net_clients.base_neural_net import NeuralNet
 from src.neural_net_clients.base_settings import BaseNetSettings
-from src.neural_net_clients.errors import NeuralNetError
 
 logger = logging.getLogger(__name__)
 
@@ -19,15 +18,6 @@ class ResGan(NeuralNet):
     def get_image_number(self) -> int:
         return 1
 
-    def __call__(self, image: bytearray) -> bytearray:
+    async def __call__(self, image: bytearray) -> bytearray:
         files = {'image': image}
-        r = self.request(files=files)
-
-        path = 'gen.png'
-        if r.status_code == 200:
-            with open(path, 'wb') as f:
-                f.write(r.content)
-
-            with open(path, 'rb') as f:
-                return f.read()
-        raise NeuralNetError(r.content)
+        return await self.request(files=files)

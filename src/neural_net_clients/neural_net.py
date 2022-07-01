@@ -6,7 +6,6 @@ from models_backend.neural_style_model.contract import STYLE_IMAGE_KEY, \
     CONTENT_IMAGE_KEY
 from src.neural_net_clients.base_neural_net import NeuralNet
 from src.neural_net_clients.base_settings import BaseNetSettings
-from src.neural_net_clients.errors import NeuralNetError
 
 
 class Image:
@@ -29,15 +28,7 @@ class ImSwapNeuralNet(NeuralNet):
     def get_image_number(self) -> int:
         return 2
 
-    def __call__(self, style_image: bytearray, content_image: bytearray) -> bytearray:
+    async def __call__(self, style_image: bytearray,
+                       content_image: bytearray) -> bytearray:
         files = {STYLE_IMAGE_KEY: style_image, CONTENT_IMAGE_KEY: content_image}
-        r = self.request(files=files)  # todo async
-
-        path = 'gen.png'
-        if r.status_code == 200:
-            with open(path, 'wb') as f:
-                f.write(r.content)
-
-            with open(path, 'rb') as f:
-                return f.read()
-        raise NeuralNetError(r.content)
+        return await self.request(files=files)
