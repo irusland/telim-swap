@@ -20,6 +20,10 @@ push:
 	docker push irusland/telim-swap_torchserve:linux
 	docker push irusland/telim-swap_backend:linux
 
+make run:
+	docker run -d --env-file .env --restart on-failure --network="host" irusland/telim-swap_backend:linux
+	docker run -d --restart on-failure -p 127.0.0.1:8080:8080 --network="host" --memory="4g" irusland/telim-swap_torchserve:linux
+
 up:
 	docker-compose up backend
 
