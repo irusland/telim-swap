@@ -5,6 +5,7 @@
 .*
 *.log
 *.jpg
+*.jpeg
 *.png
 logs/
 #*.pth
