@@ -6,7 +6,7 @@ from aiogram import types, Bot, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
-    InlineKeyboardButton
+    InlineKeyboardButton, ReplyKeyboardRemove
 
 from src.handlers.base import BaseHandler
 from src.localisation.language_coordinator import LanguageCoordinator
@@ -47,7 +47,8 @@ class PreferencesHandler(BaseHandler):
                             localisations]
         language_settings_markup = ReplyKeyboardMarkup(
             resize_keyboard=True,
-            one_time_keyboard=True
+            one_time_keyboard=True,
+
         )
         for language_button in language_buttons:
             language_settings_markup.add(language_button)
@@ -80,6 +81,7 @@ class PreferencesHandler(BaseHandler):
                 chat_id=message.chat.id, localisation_name=selected_localisation_name
             )
 
+            remove = ReplyKeyboardRemove()
             await message.answer(
-                f'{localisation.LANGUAGE_WAS_SET_TO}: {localisation._NAME}')
+                f'{localisation.LANGUAGE_WAS_SET_TO}: {localisation._NAME}', reply_markup=remove)
             await state.finish()
