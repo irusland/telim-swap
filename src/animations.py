@@ -16,11 +16,11 @@ class Animation(abc.ABC):
 
 
 class BarChartAnimation(Animation):
-    ANIMATION_TAPE = '▁▂▃▄▅▆▇█▇▆▅▄▃▁'
+    ANIMATION_TAPE = '▁▂▃▄▅▆▇█▇▆▅▄▃'
 
 
 class BlindAnimation(Animation):
-    ANIMATION_TAPE = '▉▊▋▌▍▎▏▎▍▌▋▊▉'
+    ANIMATION_TAPE = '▉▊▋▌▍▎▏▎▍▌▋▊'
 
 
 class BrailleAnimation(Animation):

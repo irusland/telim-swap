@@ -14,5 +14,7 @@ class TextHandler(BaseHandler):
         async def __call__(message: types.Message) -> None:
             localisation = language_coordinator.get_localisation(message.chat.id)
             emoji = choice(emojis)
-            msg = f'{localisation.NOTHING_HERE}, {localisation.BUT_IT_WILL_BE_HERE.lower()}! {emoji}'
+            msg = (f'{localisation.NOTHING_HERE}, '
+                   f'{localisation.BUT_IT_WILL_BE_HERE.lower()}! '
+                   f'{emoji}\n{localisation.NEED_HELP}? /help')
             await message.answer(msg)

@@ -15,12 +15,8 @@ class StartHandler(BaseHandler):
                  ):
         @dp.message_handler(commands=['start'])
         async def __call__(message: types.Message, state: FSMContext):
-            await message.reply(f'{await state.get_data()}')
-            async with state.proxy() as proxy:
-                if 'counter' not in proxy:
-                    proxy.setdefault('counter', 0)
-                proxy['counter'] += 1
-                return await message.reply(f"Counter: {proxy['counter']}")
+            locale = language_coordinator.get_localisation(message.chat.id)
+            await message.answer(f'{locale.STARTER}\n\n{locale.HELP}\n\n{locale.CREDITS}')
 
         @dp.errors_handler(exception=Exception)
         async def exception_handler(update: types.Update, error):
@@ -38,3 +34,8 @@ class StartHandler(BaseHandler):
             localisation = language_coordinator.get_localisation(message.chat.id)
             await state.finish()
             await message.answer(localisation.CANCELLED)
+
+        @dp.message_handler(state='*', commands=['help'])
+        async def help(message: types.Message, state: FSMContext) -> None:
+            localisation = language_coordinator.get_localisation(message.chat.id)
+            await message.answer(localisation.HELP)
