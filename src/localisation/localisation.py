@@ -12,6 +12,7 @@ class Localisation(BaseModel):
     _NAME: str
 
     NOTHING_HERE: str
+    BUT_IT_WILL_BE_HERE: str
     RESTRICTED: str
 
     LANGUAGE: str
@@ -34,6 +35,7 @@ class LocalisationEN(Localisation):
     _NAME: LocalisationName = LocalisationName.ENGLISH
 
     NOTHING_HERE: str = 'Nothing here'
+    BUT_IT_WILL_BE_HERE: str = 'But it will be here'
     RESTRICTED: str = 'Restricted'
 
     LANGUAGE: str = '🌍'
@@ -56,6 +58,7 @@ class LocalisationRU(LocalisationEN):
     _NAME: LocalisationName = LocalisationName.RUSSIAN
 
     NOTHING_HERE: str = 'Здесь ничего нет'
+    BUT_IT_WILL_BE_HERE: str = 'Но обязательно будет'
     RESTRICTED: str = 'Доступ запрещен'
 
     MENU: str = 'Меню'
