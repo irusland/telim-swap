@@ -2,7 +2,7 @@
 
 Это асинхронный бот https://t.me/im_swap_bot обрабатывающий картинки нейронными сетями, сделаный https://t.me/irusland (https://stepik.org/users/45922671), специально для https://www.dlschool.org!
 
-# [Видео демонстрация](https://youtu.be/TGebOS0A0qw)
+# [Видео демонстрация](https://youtu.be/IZ93KVPcAVE)
 
 # Схема
 Бот состоит из 2ух частей - контейнеров запущенных в докере, на вм 4c4r в yandex cloud
@@ -11,7 +11,7 @@
 
 2) бэк для нейросетей на torchserve
 
-![plot](/Users/ruslansirazhetdinov/Documents/MIPT/telim-swap/readme/dls-tg-bog.drawio.png)
+![plot](./readme/dls-tg-bog.drawio.png)
 
 Написан на основе библиотеки aiogram, и работает для нескольких клиентов одновременно 
 
