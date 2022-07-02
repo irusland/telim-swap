@@ -153,17 +153,18 @@ class ImageHandler(BaseHandler):
                 photos = [state_proxy[key] for key in photos_keys]
 
             await state.finish()
-            result_image = await model(
-                *photos
-            )
-
-            stop_event.set()
-            await spin
-            await message.delete()
-            async with state.proxy() as state_proxy:
-                state_proxy[RESULT_PHOTO_KEY] = result_image
-
-            await bot.send_photo(message.chat.id, result_image)
+            try:
+                result_image = await model(
+                    *photos
+                )
+            except Exception:
+                raise
+            else:
+                await bot.send_photo(message.chat.id, result_image)
+            finally:
+                stop_event.set()
+                await spin
+                await message.delete()
 
     async def _animate(self, message: types.Message, stop_event: Event):
         logger.info('Start animation for %s', message)
