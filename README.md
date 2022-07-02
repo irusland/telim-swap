@@ -1,6 +1,6 @@
 # Telegram image style swapper
 
-Это асинхронный бот https://t.me/im_swap_bot обрабатывающий картинки нейронными сетями, сделаный https://t.me/irusland (https://stepik.org/users/45922671), специально для https://www.dlschool.org!
+Это асинхронный [бот](https://t.me/im_swap_bot) обрабатывающий картинки нейронными сетями, сделаный [@irusland](https://t.me/irusland), специально для [Deep Learning Scool](https://www.dlschool.org)!
 
 # [Видео демонстрация](https://youtu.be/IZ93KVPcAVE)
 
