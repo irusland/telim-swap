@@ -8,9 +8,9 @@ install:
 	poetry install
 
 build:
-	docker build --tag base:linux -f docker/base.dockerfile --platform linux/x86_64 .
-	docker build --tag telim-swap_torchserve:linux -f docker/net-api.dockerfile --platform linux/x86_64 .
-	docker build --tag telim-swap_backend:linux -f docker/backend.dockerfile --platform linux/x86_64 .
+	docker build --progress=plain --tag base:linux -f docker/base.dockerfile --platform linux/x86_64 .
+	docker build --progress=plain --tag telim-swap_torchserve:linux -f docker/net-api.dockerfile --platform linux/x86_64 .
+	docker build --progress=plain --tag telim-swap_backend:linux -f docker/backend.dockerfile --platform linux/x86_64 .
 
 tag:
 	docker tag telim-swap_torchserve:linux irusland/telim-swap_torchserve:linux
