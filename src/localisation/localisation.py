@@ -73,6 +73,7 @@ Enjoy using it 🔥
 /image - see available neural networks
 /cancel - cancel operation
 /admin - admin panel
+/settings - preferences panel
 /help - show this message
 """
 
@@ -113,5 +114,6 @@ class LocalisationRU(LocalisationEN):
 /image - доступные нейросети
 /cancel - отменить и выйти на главный экран
 /admin - панель админа
+/settings - панель настроек
 /help - показать это сообщение
 """
