@@ -15,16 +15,16 @@ class Animation(abc.ABC):
         return len(self.ANIMATION_TAPE)
 
 
-class BarChartAnimation(Animation):
-    ANIMATION_TAPE = '▁▂▃▄▅▆▇█▇▆▅▄▃'
-
-
-class BlindAnimation(Animation):
-    ANIMATION_TAPE = '▉▊▋▌▍▎▏▎▍▌▋▊'
-
-
-class BrailleAnimation(Animation):
-    ANIMATION_TAPE = '⣾⣽⣻⢿⡿⣟⣯⣷'
+# class BarChartAnimation(Animation):
+#     ANIMATION_TAPE = '▁▂▃▄▅▆▇█▇▆▅▄▃'
+#
+#
+# class BlindAnimation(Animation):
+#     ANIMATION_TAPE = '▉▊▋▌▍▎▏▎▍▌▋▊'
+#
+#
+# class BrailleAnimation(Animation):
+#     ANIMATION_TAPE = '⣾⣽⣻⢿⡿⣟⣯⣷'
 
 
 def tostr(arr):
